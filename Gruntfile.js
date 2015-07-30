@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['public/**/*.js'],
-        dest: 'dist/built.js',
+        dest: 'public/dist/built.js',
       },
     },
 
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     uglify: {
       my_target: {
         files: {
-          'dest/output.min.js': ['dist/built.js']
+          'public/dist/output.min.js': ['public/dist/built.js']
         }
       }
     },
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
     cssmin: {
         minify: {
           src: 'public/style.css',
-          dest: 'public/style.min.css'
+          dest: 'public/dist/style.min.css'
         }
     },
 
@@ -78,6 +78,34 @@ module.exports = function(grunt) {
       prodServer: {
       }
     },
+   'string-replace': {
+    inline: {
+        files: {
+            'views/index.ejs': 'views/index.ejs',
+            'views/layout.ejs':'views/layout.ejs'
+        },
+        options: {
+            replacements: [
+                {
+                    pattern: '<!--start PROD imports',
+                    replacement: '<!--start PROD imports-->'
+                },
+                {
+                    pattern: 'end PROD imports-->',
+                    replacement: '<!--end PROD imports-->'
+                },
+                {
+                    pattern: '<!--start DEV imports-->',
+                    replacement: '<!--start DEV imports'
+                },
+                {
+                    pattern: '<!--end DEV imports-->',
+                    replacement: 'end DEV imports-->'
+                }
+            ]
+        }
+    }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -88,6 +116,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-string-replace');
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -113,7 +142,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'concat',
-    'uglify'
+    'uglify',
+    'cssmin'
 
   ]);
 

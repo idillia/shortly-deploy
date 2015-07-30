@@ -8,6 +8,7 @@ iisnode.yml
 Icon
 
 node_modules/
+public/dist/
 
 
 # Floobits
