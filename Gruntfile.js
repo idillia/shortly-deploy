@@ -136,7 +136,6 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'string-replace',
     'jshint',
     'mochaTest'
   ]);

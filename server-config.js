@@ -1,10 +1,26 @@
 var express = require('express');
 var partials = require('express-partials');
 var util = require('./lib/utility');
+var mongoose = require('mongoose');
 
 var handler = require('./lib/request-handler');
 
 var app = express();
+
+
+if (process.env.NODE_ENV === 'production') {
+  mongoose.connect("mongodb://MongoLab-v2:fiUGy1gCMC4.t1VOmKAQhFODgpb3WZmia8qtiQ.fdOg-@ds038888.mongolab.com:38888/MongoLab-v2");
+} else {
+  mongoose.connect('mongodb://localhost/test');
+}
+
+
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+  console.log('YAY!');
+});
 
 app.configure(function() {
   app.set('views', __dirname + '/views');
